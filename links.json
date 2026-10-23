@@ -107,7 +107,7 @@
       "icon": "website",
       "description": "Any custom link",
       "order": 8,
-      "enabled": true
+      "enabled": false
     },
     {
       "title": "TikTok",
