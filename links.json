@@ -91,7 +91,7 @@
       "icon": "github",
       "description": "My code",
       "order": 6,
-      "enabled": true
+      "enabled": false
     },
     {
       "title": "Spotify",
