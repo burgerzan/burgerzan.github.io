@@ -75,7 +75,7 @@
       "icon": "discord",
       "description": "Join my community",
       "order": 4,
-      "enabled": true
+      "enabled": false
     },
     {
       "title": "Telegram",
