@@ -29,7 +29,7 @@
     newTab: '(откроется в новой вкладке)'
   };
 
-  /* ---------- 2. Иконки (линейные, 24×24, свои, без логотипов брендов) ---------- */
+  /* ---------- 2. Локальные SVG-значки сервисов ---------- */
 
   const ICONS = {
     link:
@@ -58,6 +58,16 @@
     spotify:
       '<circle cx="12" cy="12" r="9"/><path d="M7.5 9.6c3.2-.9 6.5-.6 9 .9"/>' +
       '<path d="M8 12.8c2.6-.7 5.2-.4 7.3.8"/><path d="M8.6 15.8c2-.5 3.9-.3 5.5.6"/>',
+    twitch:
+      '<path d="M4 3h17v12l-5 5h-5l-4 3v-3H3V7z"/><path d="M10 7v6m6-6v6"/>',
+    vk:
+      '<path d="M3 6h4c0 5 2 8 4 9V6h4v5c2-2 3-3 4-5h3c-1 4-3 6-5 7 3 2 4 4 5 6h-4l-3-4v4h-3C6 19 3 13 3 6z"/>',
+    x:
+      '<path d="M4 3h5l11 18h-5zM20 3l-7 8M4 21l7-8"/>',
+    steam:
+      '<circle cx="16" cy="8" r="5"/><circle cx="16" cy="8" r="2.5"/><circle cx="6" cy="17" r="3"/><path d="m3 15-2-1m7 1 4-4m-3 7 6-5"/>',
+    reddit:
+      '<ellipse cx="12" cy="14" rx="9" ry="6"/><path d="m12 8 2-5 5 1m-12 12c3 2 7 2 10 0"/><circle cx="20" cy="4" r="2"/><circle cx="8" cy="13" r=".8"/><circle cx="16" cy="13" r=".8"/>',
     arrow:
       '<path d="M7 17 17 7"/><path d="M8 7h9v9"/>'
   };
@@ -78,6 +88,11 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
       'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' +
       ICONS[name] + '</svg>';
+    const filled = {
+      youtube: '<path fill="currentColor" stroke="none" d="M23 7s-.2-2-1-2.8C21 3.2 20 3.2 19.5 3.1 16.2 2.9 12 3 12 3s-4.2-.1-7.5.1C4 3.2 3 3.2 2 4.2 1.2 5 1 7 1 7S.8 9.2.8 11.5v1C.8 14.8 1 17 1 17s.2 2 1 2.8c1 1 2.3 1 2.9 1.1 2.1.2 7.1.2 7.1.2s4.2 0 7.5-.3c.5 0 1.5-.1 2.5-1.1.8-.8 1-2.8 1-2.8s.2-2.2.2-4.5v-1C23.2 9.2 23 7 23 7Z"/><path fill="white" stroke="none" d="m10 8 6 4-6 4z"/>',
+      telegram: '<circle fill="currentColor" stroke="none" cx="12" cy="12" r="11"/><path fill="white" stroke="none" d="m5 11 13-5-3 13-4-4-2 2v-4l7-5-8 4z"/>'
+    };
+    if (filled[name]) span.firstChild.innerHTML = filled[name];
     return span.firstChild;
   }
 
@@ -151,6 +166,7 @@
     return {
       site: {
         lang: /^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/.test(lang) ? lang : 'ru',
+        demo: site.demo === true,
         title: str(site.title, 80),
         description: str(site.description, 200)
       },
@@ -171,7 +187,9 @@
         linkDescriptions: vis.linkDescriptions !== false,
         footer: vis.footer !== false
       },
-      social: normalizeList(raw.social, 'social'),
+      social: raw.socialSource === 'links'
+        ? normalizeList(raw.links, 'links').filter(link => !['link', 'website', 'mail'].includes(link.icon))
+        : normalizeList(raw.social, 'social'),
       links: normalizeList(raw.links, 'links'),
       footer: {
         text: str(footer.text, 120),
@@ -263,6 +281,7 @@
 
       const a = createAnchor(link);
       a.className = 'card';
+      a.dataset.icon = link.icon;
 
       const icon = document.createElement('span');
       icon.className = 'card-icon';
@@ -333,6 +352,7 @@
 
   function render(cfg) {
     document.documentElement.lang = cfg.site.lang;
+    $('demo-note').hidden = !cfg.site.demo;
 
     const title = cfg.site.title || cfg.profile.name;
     if (title) document.title = title;
