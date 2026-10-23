@@ -51,7 +51,7 @@
       "icon": "youtube",
       "description": "My videos",
       "order": 1,
-      "enabled": true
+      "enabled": false
     },
     {
       "title": "TikTok",
@@ -125,5 +125,6 @@
     "privacyLabel": "Datenschutzerklärung",
     "privacyUrl": "privacy.html",
     "links": []
-  }
+  },
+  "socialSource": "links"
 }
