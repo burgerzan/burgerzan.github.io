@@ -1,0 +1,109 @@
+{
+  "site": {
+    "lang": "ru",
+    "title": "My Name — ссылки",
+    "description": "Welcome to my page!"
+  },
+
+  "profile": {
+    "name": "My Name",
+    "description": "Welcome to my page!",
+    "avatar": "assets/avatar.svg",
+    "avatarAlt": "Аватар"
+  },
+
+  "theme": {
+    "accent": "#8b7cff",
+    "accent2": "#2dd4bf"
+  },
+
+  "visibility": {
+    "avatar": true,
+    "description": true,
+    "social": true,
+    "linkDescriptions": true,
+    "footer": true
+  },
+
+  "social": [
+    { "title": "YouTube", "url": "https://youtube.com/", "icon": "youtube", "order": 1, "enabled": true },
+    { "title": "Telegram", "url": "https://t.me/", "icon": "telegram", "order": 2, "enabled": true },
+    { "title": "GitHub", "url": "https://github.com/", "icon": "github", "order": 3, "enabled": true }
+  ],
+
+  "links": [
+    {
+      "title": "YouTube",
+      "url": "https://youtube.com/",
+      "icon": "youtube",
+      "description": "My videos",
+      "order": 1,
+      "enabled": true
+    },
+    {
+      "title": "TikTok",
+      "url": "https://tiktok.com/",
+      "icon": "tiktok",
+      "description": "Short clips",
+      "order": 2,
+      "enabled": true
+    },
+    {
+      "title": "Instagram",
+      "url": "https://instagram.com/",
+      "icon": "instagram",
+      "description": "Photos and stories",
+      "order": 3,
+      "enabled": true
+    },
+    {
+      "title": "Discord",
+      "url": "https://discord.com/",
+      "icon": "discord",
+      "description": "Join my community",
+      "order": 4,
+      "enabled": true
+    },
+    {
+      "title": "Telegram",
+      "url": "https://t.me/",
+      "icon": "telegram",
+      "description": "News and chat",
+      "order": 5,
+      "enabled": true
+    },
+    {
+      "title": "GitHub",
+      "url": "https://github.com/",
+      "icon": "github",
+      "description": "My code",
+      "order": 6,
+      "enabled": true
+    },
+    {
+      "title": "Spotify",
+      "url": "https://open.spotify.com/",
+      "icon": "spotify",
+      "description": "My playlists",
+      "order": 7,
+      "enabled": true
+    },
+    {
+      "title": "My website",
+      "url": "https://example.com/",
+      "icon": "website",
+      "description": "Any custom link",
+      "order": 8,
+      "enabled": true
+    }
+  ],
+
+  "footer": {
+    "text": "",
+    "author": "",
+    "showPrivacy": true,
+    "privacyLabel": "Datenschutzerklärung",
+    "privacyUrl": "privacy.html",
+    "links": []
+  }
+}
