@@ -116,6 +116,15 @@
       "description": "",
       "order": 9,
       "enabled": true
+    },
+    {
+      "title": "X / Twitter",
+      "url": "https://x.com/Vandershik",
+      "icon": "x",
+      "service": "x",
+      "description": "",
+      "order": 10,
+      "enabled": true
     }
   ],
   "footer": {
