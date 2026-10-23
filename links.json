@@ -4,19 +4,16 @@
     "title": "My Name — ссылки",
     "description": "Welcome to my page!"
   },
-
   "profile": {
     "name": "My Name",
     "description": "Welcome to my page!",
     "avatar": "assets/avatar.svg",
     "avatarAlt": "Аватар"
   },
-
   "theme": {
     "accent": "#8b7cff",
     "accent2": "#2dd4bf"
   },
-
   "visibility": {
     "avatar": true,
     "description": true,
@@ -24,13 +21,29 @@
     "linkDescriptions": true,
     "footer": true
   },
-
   "social": [
-    { "title": "YouTube", "url": "https://youtube.com/", "icon": "youtube", "order": 1, "enabled": true },
-    { "title": "Telegram", "url": "https://t.me/", "icon": "telegram", "order": 2, "enabled": true },
-    { "title": "GitHub", "url": "https://github.com/", "icon": "github", "order": 3, "enabled": true }
+    {
+      "title": "YouTube",
+      "url": "https://youtube.com/",
+      "icon": "youtube",
+      "order": 1,
+      "enabled": true
+    },
+    {
+      "title": "Telegram",
+      "url": "https://t.me/",
+      "icon": "telegram",
+      "order": 2,
+      "enabled": true
+    },
+    {
+      "title": "GitHub",
+      "url": "https://github.com/",
+      "icon": "github",
+      "order": 3,
+      "enabled": true
+    }
   ],
-
   "links": [
     {
       "title": "YouTube",
@@ -95,9 +108,16 @@
       "description": "Any custom link",
       "order": 8,
       "enabled": true
+    },
+    {
+      "title": "TikTok",
+      "url": "https://www.tiktok.com/@v2.ultrakill",
+      "icon": "tiktok",
+      "description": "",
+      "order": 9,
+      "enabled": true
     }
   ],
-
   "footer": {
     "text": "",
     "author": "",
