@@ -9,7 +9,8 @@
      5. Обработка нажатий (место для будущей аналитики)
      6. Запуск
 
-   Секретов, трекеров и cookies здесь нет. Данные посетителей не собираются.
+   Секретов и cookies здесь нет. При подключённом Worker отправляется метка
+   нажатой ссылки для агрегированной статистики; IP и имена не сохраняются.
    ========================================================================== */
 
 (() => {
@@ -140,6 +141,7 @@
       index,
       title,
       url,
+      analyticsKey: clickKey(String(item.title), String(item.url)),
       icon: iconName(item.icon),
       description: str(item.description, 120),
       order: typeof item.order === 'number' && Number.isFinite(item.order) ? item.order : index
@@ -334,23 +336,15 @@
     $('footer-text').hidden = !$('footer-text').textContent;
 
     const list = $('footer-links');
-    const privacyItem = $('privacy-item');
+
 
     cfg.footer.links.forEach((link) => {
       const li = document.createElement('li');
       const a = createAnchor(link);
       a.textContent = link.title;
       li.appendChild(a);
-      list.insertBefore(li, privacyItem);
+      list.appendChild(li);
     });
-
-    if (cfg.footer.showPrivacy) {
-      const a = $('privacy-link');
-      a.textContent = cfg.footer.privacyLabel;
-      a.href = cfg.footer.privacyUrl;
-    } else {
-      privacyItem.remove();
-    }
   }
 
   function render(cfg) {
@@ -402,17 +396,34 @@
   /**
    * Вызывается при нажатии на любую ссылку (карточки, соцсети, ссылки в подвале).
    *
-   * Сейчас функция намеренно ничего не делает: аналитика не подключена,
-   * ничего не отправляется и не сохраняется.
-   *
-   * Сюда позже можно добавить, например, вызов собственного API подсчёта кликов.
-   * Не вызывайте preventDefault(), чтобы переход по ссылке не ломался.
-   * Если подключите аналитику — обновите privacy.html.
+   * При включении через бота отправляет только метку ссылки в Worker.
+   * Не блокирует переход; агрегаты по стране вычисляются на стороне Cloudflare.
    *
    * @param {{title: string, url: string, icon: string}} link
    */
-  function handleLinkClick(link) { // eslint-disable-line no-unused-vars
-    // Пока пусто.
+  let analyticsEndpoint = null;
+  function handleLinkClick(link) {
+    if (!analyticsEndpoint || !/^https?:/.test(link.url)) return;
+    // Та же метка, что в Worker; переход не ждёт сеть и не блокируется ошибкой.
+    fetch(analyticsEndpoint, { method: 'POST', body: link.analyticsKey, credentials: 'omit', keepalive: true }).catch(() => {});
+  }
+  function clickKey(title, url) {
+    let h = 0x811c9dc5;
+    const value = title + '\n' + url;
+    for (let i = 0; i < value.length; i++) { h ^= value.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return h.toString(16).padStart(8, '0');
+  }
+  function applyRemoteSettings(raw) {
+    const endpoint = safeUrl(raw.analytics?.endpoint);
+    analyticsEndpoint = raw.analytics?.enabled === true && endpoint && new URL(endpoint).protocol === 'https:' ? endpoint : null;
+    const font = raw.theme?.font;
+    if (typeof font === 'string' && /^assets\/uploads\/font-\d+-\d+\.(ttf|otf|woff2?)$/.test(font)) {
+      const face = new FontFace('Uploaded Site Font', `url("${new URL(font, document.baseURI).href}")`);
+      face.load().then(loaded => {
+        document.fonts.add(loaded);
+        document.body.style.setProperty('--font', '"Uploaded Site Font", "Bubblegum Sans", system-ui, sans-serif');
+      }).catch(() => console.warn('Шрифт недоступен; используется Bubblegum Sans.'));
+    }
   }
 
   /* ---------- 6. Запуск ---------- */
@@ -439,6 +450,7 @@
   async function init() {
     try {
       const raw = await fetchConfig();
+      applyRemoteSettings(raw);
       render(normalize(raw));
     } catch (err) {
       console.error(err);
