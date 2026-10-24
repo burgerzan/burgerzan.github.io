@@ -5,25 +5,40 @@
   function validate(raw) {
     if (!raw || raw.version !== 1 || !Array.isArray(raw.items) || raw.items.length > 30) throw new Error('Ожидается макет версии 1, не более 30 картинок.');
     let size = 0;
-    return { version: 1, items: raw.items.map((item, i) => {
+    const bg = raw.background || {};
+    const color = (v, fallback) => typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v : fallback;
+    const background = {
+      type: ['original', 'solid', 'gradient', 'animated'].includes(bg.type) ? bg.type : 'original',
+      top: color(bg.top, '#d97575'), bottom: color(bg.bottom, '#ffffff'),
+      angle: number(bg.angle, 0, 360, 180), speed: number(bg.speed, 3, 60, 15)
+    };
+    return { version: 1, background, items: raw.items.map((item, i) => {
       if (!item || typeof item.src !== 'string' || !/^data:image\/(png|jpeg|gif|webp);base64,[A-Za-z0-9+/=\s]+$/.test(item.src)) throw new Error('Разрешены только PNG, JPEG, GIF и WebP.');
       size += item.src.length;
       if (size > 16000000) throw new Error('Макет слишком большой: максимум примерно 12 МБ изображений.');
-      const pos = (v = {}) => ({ x: number(v.x, 0, 100, 10), y: number(v.y, 0, 95, 10), width: number(v.width, 4, 70, 20), angle: number(v.angle, -180, 180, 0) });
+      const pos = (v = {}) => ({ x: number(v.x, 0, 100, 10), y: number(v.y, 0, 95, 10), width: number(v.width, 4, 70, 20), angle: number(v.angle, -180, 180, 0), opacity: number(v.opacity, 0, 1, 1), layer: v.layer === 'back' ? 'back' : 'front' });
       return { id: String(i), name: String(item.name || 'Картинка').slice(0, 80), src: item.src, desktop: pos(item.desktop), mobile: pos(item.mobile) };
     }) };
   }
   function render(layer, model, mode) {
+    const body = layer.ownerDocument.body, bg = model.background || { type: 'original' };
+    body.dataset.background = bg.type;
+    body.style.setProperty('--scene-top', bg.top || '#d97575');
+    body.style.setProperty('--scene-bottom', bg.bottom || '#ffffff');
+    body.style.setProperty('--scene-angle', (bg.angle ?? 180) + 'deg');
+    body.style.setProperty('--scene-speed', (bg.speed ?? 15) + 's');
     layer.replaceChildren();
     model.items.forEach(item => {
       const img = document.createElement('img');
       const p = item[mode];
       img.src = item.src; img.alt = ''; img.draggable = false; img.className = 'decoration'; img.dataset.id = item.id;
-      Object.assign(img.style, { left: p.x + '%', top: p.y + '%', width: p.width + '%', transform: `rotate(${p.angle}deg)` });
+      Object.assign(img.style, { left: p.x + '%', top: p.y + '%', width: p.width + '%', transform: `rotate(${p.angle}deg)`, opacity: p.opacity ?? 1, zIndex: p.layer === 'back' ? 0 : 2 });
       layer.append(img);
     });
   }
   window.Decorations = { validate, render };
+  // The workshop uses this API for its iframe, not for decorating its own controls.
+  if (!document.getElementById('app')) return;
   const layer = document.createElement('div'); layer.className = 'decoration-layer'; layer.setAttribute('aria-hidden', 'true'); document.body.append(layer);
   window.decorationLayer = layer;
   if (new URLSearchParams(location.search).has('layout-preview') && window.parent !== window) return;
