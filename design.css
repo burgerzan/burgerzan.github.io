@@ -21,8 +21,19 @@ body { background: linear-gradient(180deg, #d97575 0, #edb2a6 340px, #f9ddd0 680
 .profile { position: static; text-align: center; width: 100%; }
 .profile > .eyebrow { display: none; }
 .avatar { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 22px; padding: 4px; background: #fff9; border: 1px solid #fffb; transform: none; box-shadow: 0 10px 40px #7d30301c; }
-.avatar img { border-radius: 50%; background: #fff; }
+.avatar img { border-radius: 50%; background: #fff; position: relative; z-index: 1; }
+/* Только кольцо, без вращения аватара; ::after остаётся для запасного инициала. */
+.avatar { position: relative; overflow: visible; isolation: isolate; }
+.avatar::before { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 3px solid transparent; background: conic-gradient(from 0deg, #b72f48, #fff0 35%, #ffe0b5 60%, #b72f48) border-box; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude; pointer-events: none; animation: avatar-ring 5s linear infinite; }
+@keyframes avatar-ring { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .avatar::before { animation: none; } }
 .avatar.no-img::after { color: #a34343; }
+/* Hover is visual only: avatar remains a non-interactive div. */
+.avatar { transition: transform .25s ease; }
+@media (hover: hover) and (pointer: fine) {
+  .avatar:hover { transform: scale(1.12); }
+}
+@media (prefers-reduced-motion: reduce) { .avatar { transition: none; } }
 .profile h1 { font-size: clamp(38px, 8vw, 52px); font-weight: 400; line-height: 1.15; letter-spacing: 0; }
 .wordmark { font-weight: 400; letter-spacing: .04em; }
 .bio { font-size: 18px; line-height: 1.55; }
@@ -62,8 +73,34 @@ body { background: linear-gradient(180deg, #d97575 0, #edb2a6 340px, #f9ddd0 680
 :focus-visible { outline-color: #922f38; }
 @media (hover: hover) { .card:hover { transform: translateY(-2px); border-color: #d9a59e; } .social a:hover { background: #fff; } }
 @media (max-width: 380px) { .page { padding-inline: 16px; } }
-.decoration-layer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 2; }
+.page, .visitor-counter, .footer { position: relative; z-index: 1; }
+/* No stacking context on the wrapper: each image can sit below or above content. */
+/* Stable design boards, shared by the editor and site. Never use the
+   viewport/document height: it changes with links, fonts and the counter. */
+html:has(.decoration-layer) { scrollbar-gutter: stable; }
+body:has(> .decoration-layer) { min-height: max(100dvh, min(135vw, 1350px)); }
+.decoration-layer { position: absolute; top: 0; left: 50%; width: 1000px; aspect-ratio: 1000 / 1350; transform: translateX(-50%); overflow: clip; pointer-events: none; }
+@media (max-width: 600px) {
+  body:has(> .decoration-layer) { min-height: max(100dvh, min(346.153846vw, 1350px)); }
+  .decoration-layer { width: min(100vw, 390px); aspect-ratio: 390 / 1350; }
+}
+body.layout-edit .decoration { z-index: 3 !important; }
+body[data-background="solid"] { background: var(--scene-top); }
+body[data-background="gradient"], body[data-background="animated"] { background: linear-gradient(var(--scene-angle), var(--scene-top), var(--scene-bottom)); }
+body[data-background="animated"] { background-size: 200% 200%; animation: scene-drift var(--scene-speed) ease-in-out infinite alternate; }
+@keyframes scene-drift { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
+@media (prefers-reduced-motion: reduce) { body[data-background="animated"] { animation: none; } }
 .decoration { position: absolute; display: block; height: auto; max-width: none; user-select: none; }
+/* Individual targets receive clicks; the transparent board never blocks links. */
+.pet-target { pointer-events: auto; cursor: pointer; transform-origin: 50% 100%; -webkit-tap-highlight-color: transparent; }
+.pet-target:focus-visible { outline: 2px dashed #922f38; outline-offset: 4px; }
+.pet-target.is-petted { animation: pet-squish .4s ease-in-out 5; }
+.pet-hand { position: absolute; height: auto; max-width: none; z-index: 4; pointer-events: none; user-select: none; }
+@keyframes pet-squish {
+  0%, 100% { scale: 1 1; }
+  50% { scale: 1.08 .88; }
+}
+@media (prefers-reduced-motion: reduce) { .pet-target.is-petted { animation: none; } }
 body.layout-edit .decoration { pointer-events: auto; cursor: grab; touch-action: none; outline: 1px dashed #99343c; }
 body.layout-edit .decoration.selected { outline: 3px solid #99343c; }
 @media (prefers-reduced-motion: reduce) { .decoration-layer { display: none; } body.layout-edit .decoration-layer { display: block; } }
