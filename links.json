@@ -12,7 +12,8 @@
   },
   "theme": {
     "accent": "#8b7cff",
-    "accent2": "#2dd4bf"
+    "accent2": "#2dd4bf",
+    "font": "assets/uploads/font-6165629856-490002204.ttf"
   },
   "visibility": {
     "avatar": true,
