@@ -256,6 +256,7 @@
 
   function renderSocial(cfg) {
     const list = $('social');
+    if (!list) return;
     list.textContent = '';
     if (!cfg.visibility.social || !cfg.social.length) {
       list.hidden = true;
