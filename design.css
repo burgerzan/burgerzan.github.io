@@ -79,10 +79,12 @@ body { background: linear-gradient(180deg, #d97575 0, #edb2a6 340px, #f9ddd0 680
    viewport/document height: it changes with links, fonts and the counter. */
 html:has(.decoration-layer) { scrollbar-gutter: stable; }
 body:has(> .decoration-layer) { min-height: max(100dvh, min(135vw, 1350px)); }
-.decoration-layer { position: absolute; top: 0; left: 50%; width: 1000px; aspect-ratio: 1000 / 1350; transform: translateX(-50%); overflow: clip; pointer-events: none; }
+/* Center without transform: a transformed board traps all GIFs in a stacking
+   context behind .page, so its transparent header intercepts their clicks. */
+.decoration-layer { position: absolute; top: 0; left: 50%; margin-left: -500px; width: 1000px; aspect-ratio: 1000 / 1350; overflow: clip; pointer-events: none; }
 @media (max-width: 600px) {
   body:has(> .decoration-layer) { min-height: max(100dvh, min(346.153846vw, 1350px)); }
-  .decoration-layer { width: min(100vw, 390px); aspect-ratio: 390 / 1350; }
+  .decoration-layer { width: min(100vw, 390px); margin-left: max(-50vw, -195px); aspect-ratio: 390 / 1350; }
 }
 body.layout-edit .decoration { z-index: 3 !important; }
 body[data-background="solid"] { background: var(--scene-top); }
