@@ -144,5 +144,9 @@
     "privacyUrl": "privacy.html",
     "links": []
   },
-  "socialSource": "links"
+  "socialSource": "links",
+  "analytics": {
+    "enabled": true,
+    "endpoint": "https://burgerzan-15736518-1862.artemdavedenko10.workers.dev/click"
+  }
 }
