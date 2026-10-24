@@ -115,7 +115,7 @@
       "icon": "tiktok",
       "description": "",
       "order": 9,
-      "enabled": true
+      "enabled": false
     },
     {
       "title": "X / Twitter",
