@@ -1,12 +1,13 @@
 {
   "site": {
     "lang": "ru",
-    "title": "My Name — ссылки",
-    "description": "Welcome to my page!"
+    "title": "Burgerzan | Links",
+    "description": ""
   },
   "profile": {
-    "name": "My Name",
-    "description": "Welcome to my page!",
+    "name": "v2.ultrakill
+    (Burgerzan)",
+    "description": "",
     "avatar": "avatar.svg",
     "avatarAlt": "Аватар"
   },
