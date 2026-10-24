@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>My Name — ссылки</title>
+  <meta name="description" content="Welcome to my page!">
+  <meta name="theme-color" content="#090a0f">
+  <meta name="color-scheme" content="dark">
+
+  <!-- Иконка сайта. Пути относительные — работают и в репозитории GitHub Pages (username.github.io/repo/) -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- Open Graph (предпросмотр в мессенджерах).
+       Мессенджеры НЕ выполняют JavaScript, поэтому эти значения нужно один раз
+       поменять здесь вручную (см. README, раздел «Предпросмотр ссылки»). -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="My Name — ссылки">
+  <meta property="og:description" content="Welcome to my page!">
+  <meta property="og:locale" content="ru_RU">
+  <meta name="twitter:card" content="summary">
+  <!-- Раскомментируйте и замените после публикации (нужен абсолютный адрес):
+  <meta property="og:url" content="https://USERNAME.github.io/REPO/">
+  <meta property="og:image" content="https://USERNAME.github.io/REPO/assets/avatar.png">
+  -->
+
+  <link rel="preload" href="Bubblegum_Sans/BubblegumSans-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="design.css">
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <span class="glow glow-a"></span>
+    <span class="glow glow-b"></span>
+  </div>
+
+  <main class="page" id="app">
+    <div class="layout">
+    <header class="profile" id="profile" hidden>
+      <p class="eyebrow">МОЁ МЕСТО В ИНТЕРНЕТЕ</p>
+      <div class="avatar" id="avatar-wrap">
+        <img id="avatar" width="112" height="112" alt="">
+      </div>
+      <h1 id="name"></h1>
+      <p class="bio" id="description"></p>
+      <ul class="social" id="social" aria-label="Социальные сети"></ul>
+    </header>
+
+    <section class="link-section" aria-labelledby="links-heading">
+      <div class="section-heading"><div><p class="eyebrow">ОСТАЁМСЯ НА СВЯЗИ</p><h2 id="links-heading">Все ссылки<span class="heading-dot">.</span></h2></div><span class="section-symbol" aria-hidden="true">↙</span></div>
+      <p class="demo-note" id="demo-note" hidden>Демо-версия · здесь примеры ссылок, а не личные аккаунты.</p>
+      <div class="status" id="status" role="status">Загружаем ссылки…</div>
+      <nav aria-label="Ссылки">
+        <ul class="links" id="links"></ul>
+      </nav>
+      <noscript>
+        <p class="status error">Для отображения ссылок нужен включённый JavaScript.</p>
+      </noscript>
+      <p class="links-note">Выбирай, где тебе удобнее <span aria-hidden="true">↗</span></p>
+    </section>
+    </div>
+  </main>
+
+  <figure class="visitor-counter" aria-labelledby="counter-caption">
+    <!-- Без num: сервис увеличивает общий счётчик при запросе изображения. -->
+    <img src="https://count.getloli.com/@burgerzanr34?theme=rule34&amp;padding=5&amp;offset=2&amp;align=bottom&amp;scale=1.1&amp;pixelated=1&amp;darkmode=auto&amp;prefix=0"
+         alt="Page visit counter" loading="eager" decoding="async" referrerpolicy="no-referrer">
+    <figcaption id="counter-caption" lang="en">Total page visits</figcaption>
+  </figure>
+
+  <footer class="footer" id="footer">
+    <p id="footer-text"></p>
+    <ul class="footer-links" id="footer-links">
+      <li id="privacy-item"><a href="privacy.html" id="privacy-link">Datenschutzerklärung</a></li>
+    </ul>
+  </footer>
+
+  <script src="script.js" defer></script>
+  <script src="decorations.js" defer></script>
+</body>
+</html>
