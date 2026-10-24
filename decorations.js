@@ -17,7 +17,7 @@
       size += item.src.length;
       if (size > 16000000) throw new Error('Макет слишком большой: максимум примерно 12 МБ изображений.');
       const pos = (v = {}) => ({ x: number(v.x, 0, 100, 10), y: number(v.y, 0, 95, 10), width: number(v.width, 4, 70, 20), angle: number(v.angle, -180, 180, 0), opacity: number(v.opacity, 0, 1, 1), layer: v.layer === 'back' ? 'back' : 'front' });
-      return { id: String(i), name: String(item.name || 'Картинка').slice(0, 80), src: item.src, desktop: pos(item.desktop), mobile: pos(item.mobile) };
+      return { id: String(i), name: String(item.name || 'Картинка').slice(0, 80), src: item.src, ...(item.anchor === 'copyright' ? { anchor: 'copyright' } : {}), desktop: pos(item.desktop), mobile: pos(item.mobile) };
     }) };
   }
   function render(layer, model, mode) {
@@ -34,6 +34,17 @@
       img.src = item.src; img.alt = ''; img.draggable = false; img.className = 'decoration'; img.dataset.id = item.id;
       Object.assign(img.style, { left: p.x + '%', top: p.y + '%', width: p.width + '%', transform: `rotate(${p.angle}deg)`, opacity: p.opacity ?? 1, zIndex: p.layer === 'back' ? 0 : 2 });
       layer.append(img);
+      if (item.anchor === 'copyright') img.dataset.anchor = 'copyright';
+    });
+    alignCopyright(layer);
+  }
+  // Follow the actual footer, including changes after fonts, links or counter load.
+  function alignCopyright(layer) {
+    const footer = layer.ownerDocument.getElementById('footer-text');
+    if (!footer) return;
+    const board = layer.getBoundingClientRect(), target = footer.getBoundingClientRect();
+    layer.querySelectorAll('[data-anchor="copyright"]').forEach(img => {
+      img.style.top = (target.top + target.height / 2 - board.top - img.getBoundingClientRect().height / 2) + 'px';
     });
   }
   window.Decorations = { validate, render };
@@ -46,5 +57,9 @@
     const model = validate(raw);
     const draw = () => render(layer, model, innerWidth <= 600 ? 'mobile' : 'desktop');
     draw(); window.addEventListener('resize', draw);
+    layer.addEventListener('load', () => alignCopyright(layer), true);
+    const observer = new ResizeObserver(() => alignCopyright(layer));
+    document.querySelectorAll('.page, .visitor-counter, .footer').forEach(el => observer.observe(el));
+    document.fonts.ready.then(() => alignCopyright(layer));
   }).catch(e => console.warn('Декор:', e.message));
 })();
