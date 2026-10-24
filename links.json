@@ -81,7 +81,7 @@
       "title": "Telegram",
       "url": "https://t.me/FastFoodfromBurger",
       "icon": "telegram",
-      "description": "News and chat",
+      "description": "",
       "order": 5,
       "enabled": true
     },
