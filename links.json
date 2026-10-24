@@ -59,7 +59,7 @@
       "icon": "tiktok",
       "description": "Short clips",
       "order": 2,
-      "enabled": true
+      "enabled": false
     },
     {
       "title": "Instagram",
