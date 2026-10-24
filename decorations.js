@@ -80,7 +80,7 @@
         hand.addEventListener('error', stop, { once: true });
         layer.append(hand);
         img.classList.add('is-petted');
-        timer = setTimeout(stop, 2000);
+        timer = setTimeout(stop, 800);
       };
       img.addEventListener('click', pet);
       img.addEventListener('keydown', event => {
