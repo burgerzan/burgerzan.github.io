@@ -75,12 +75,13 @@
         Object.assign(hand.style, {
           left: (img.offsetLeft - img.offsetWidth * 0.05) + 'px',
           top: (img.offsetTop - img.offsetWidth * 0.40) + 'px',
-          width: (img.offsetWidth * 1.1) + 'px'
+          width: (img.offsetWidth * 1.1) + 'px',
+          transform: name === 'Minos Prime' ? 'scaleX(-1)' : 'none'
         });
         hand.addEventListener('error', stop, { once: true });
         layer.append(hand);
         img.classList.add('is-petted');
-        timer = setTimeout(stop, 800);
+        timer = setTimeout(stop, 500);
       };
       img.addEventListener('click', pet);
       img.addEventListener('keydown', event => {
