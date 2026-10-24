@@ -47,15 +47,62 @@
       img.style.top = (target.top + target.height / 2 - board.top - img.getBoundingClientRect().height / 2) + 'px';
     });
   }
+  // Live-page interaction only: the editor keeps its ordinary draggable images.
+  function enablePetting(layer, model) {
+    const targets = model.items.filter(item => /^(v2-v2-ultrakill|minos-prime-plush)/i.test(item.name));
+    targets.forEach(item => {
+      const img = Array.from(layer.querySelectorAll('.decoration')).find(el => el.dataset.id === item.id);
+      if (!img) return;
+      const name = item.name.startsWith('v2-') ? 'V2' : 'Minos Prime';
+      img.classList.add('pet-target');
+      img.setAttribute('role', 'button');
+      img.setAttribute('tabindex', '0');
+      img.setAttribute('aria-label', 'Погладить ' + name);
+      let timer, hand;
+      const stop = () => {
+        clearTimeout(timer);
+        hand?.remove();
+        img.classList.remove('is-petted');
+      };
+      const pet = () => {
+        stop();
+        hand = document.createElement('img');
+        hand.className = 'pet-hand';
+        hand.src = 'petpet-transparent.gif';
+        hand.alt = ''; hand.draggable = false;
+        hand.setAttribute('aria-hidden', 'true');
+        // Coordinates use the same stable board as the original GIF.
+        Object.assign(hand.style, {
+          left: (img.offsetLeft - img.offsetWidth * 0.05) + 'px',
+          top: (img.offsetTop - img.offsetWidth * 0.40) + 'px',
+          width: (img.offsetWidth * 1.1) + 'px'
+        });
+        hand.addEventListener('error', stop, { once: true });
+        layer.append(hand);
+        img.classList.add('is-petted');
+        timer = setTimeout(stop, 2000);
+      };
+      img.addEventListener('click', pet);
+      img.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          if (!event.repeat) pet();
+        }
+      });
+    });
+  }
   window.Decorations = { validate, render };
   // The workshop uses this API for its iframe, not for decorating its own controls.
   if (!document.getElementById('app')) return;
-  const layer = document.createElement('div'); layer.className = 'decoration-layer'; layer.setAttribute('aria-hidden', 'true'); document.body.append(layer);
+  const layer = document.createElement('div'); layer.className = 'decoration-layer'; document.body.append(layer);
   window.decorationLayer = layer;
   if (new URLSearchParams(location.search).has('layout-preview') && window.parent !== window) return;
   fetch('decorations.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error('Не загружен макет'); return r.json(); }).then(raw => {
     const model = validate(raw);
-    const draw = () => render(layer, model, innerWidth <= 600 ? 'mobile' : 'desktop');
+    const draw = () => {
+      render(layer, model, innerWidth <= 600 ? 'mobile' : 'desktop');
+      enablePetting(layer, model);
+    };
     draw(); window.addEventListener('resize', draw);
     layer.addEventListener('load', () => alignCopyright(layer), true);
     const observer = new ResizeObserver(() => alignCopyright(layer));
