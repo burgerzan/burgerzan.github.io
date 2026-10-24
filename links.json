@@ -125,14 +125,6 @@
       "description": "",
       "order": 10,
       "enabled": true
-    },
-    {
-      "title": "Pinterest",
-      "url": "https://pinterest.com/burgerzan/",
-      "icon": "website",
-      "description": "",
-      "order": 11,
-      "enabled": true
     }
   ],
   "footer": {
