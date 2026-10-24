@@ -22,9 +22,27 @@
     "footer": true
   },
   "social": [
-    { "title": "YouTube", "url": "https://youtube.com/", "icon": "youtube", "order": 1, "enabled": true },
-    { "title": "Telegram", "url": "https://t.me/", "icon": "telegram", "order": 2, "enabled": true },
-    { "title": "GitHub", "url": "https://github.com/", "icon": "github", "order": 3, "enabled": true }
+    {
+      "title": "YouTube",
+      "url": "https://youtube.com/",
+      "icon": "youtube",
+      "order": 1,
+      "enabled": true
+    },
+    {
+      "title": "Telegram",
+      "url": "https://t.me/",
+      "icon": "telegram",
+      "order": 2,
+      "enabled": true
+    },
+    {
+      "title": "GitHub",
+      "url": "https://github.com/",
+      "icon": "github",
+      "order": 3,
+      "enabled": true
+    }
   ],
   "links": [
     {
@@ -39,7 +57,7 @@
       "title": "TikTok",
       "url": "https://www.tiktok.com/@v2.ultrakill",
       "icon": "tiktok",
-      "description": "Short clips",
+      "description": "",
       "order": 2,
       "enabled": true
     },
